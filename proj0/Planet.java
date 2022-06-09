@@ -25,6 +25,7 @@ public class Planet {
 	}
 
 	public double calcForceExertedBy(Planet p) {
-		return (gravitionalConstant * this.mass	* p.mass) / calcDistance(p);
+		double distance = this.calcDistance(p);
+		return (gravitionalConstant * this.mass	* p.mass) / (distance * distance);
 	}
 }
