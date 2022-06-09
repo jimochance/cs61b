@@ -1,2 +1,2 @@
 # UCBerkeley cs61b
-## For personal learning and practice
+For personal learning and practice
