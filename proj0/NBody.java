@@ -8,7 +8,7 @@ public class NBody {
 
 	public static Planet[] readPlanets(String filename) {
 		In in = new In(filename);
-		Planet[] allPlanets = new Planet[10];
+		Planet[] allPlanets = new Planet[5];
 
 		/* skip first two lines */
 		in.readLine();
@@ -71,12 +71,12 @@ public class NBody {
 			StdDraw.pause(10);
 		}
 
-		StdOut.printf("%d\n", planets.length);
+		StdOut.printf("%d\n", allPlanets.length);
 		StdOut.printf("%.2e\n", radius);
-		for (int i = 0; i < planets.length; i++) {
+		for (int i = 0; i < allPlanets.length; i++) {
     		StdOut.printf("%11.4e %11.4e %11.4e %11.4e %11.4e %12s\n",
-                  planets[i].xxPos, planets[i].yyPos, planets[i].xxVel,
-                  planets[i].yyVel, planets[i].mass, planets[i].imgFileName);   
+                  allPlanets[i].xxPos, allPlanets[i].yyPos, allPlanets[i].xxVel,
+                  allPlanets[i].yyVel, allPlanets[i].mass, allPlanets[i].imgFileName);   
 		}
 	}
 }
