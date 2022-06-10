@@ -7,8 +7,13 @@ public class Planet {
 	public String imgFileName;
 	private static double gravitionalConstant = 6.67e-11;
 
-	public Planet() {
-		
+	public Planet(Planet p) {
+		this.xxPos = p.xxPos;
+		this.yyPos = p.yyPos;
+		this.xxVel = p.xxVel;
+		this.yyVel = p.yyVel;
+		this.mass = p.mass;
+		this.imgFileName = p.imgFileName;
 	}
 
 	public Planet(double xP, double yP, double xV, double yV, double m, String img) {
