@@ -5,9 +5,9 @@ public class Planet {
 	public double yyVel = 4.0;
 	public double mass = 5.0;
 	public String imgFileName;
-	public static double gravitionalConstant = 6.67e-11;
+	private static double gravitionalConstant = 6.67e-11;
 
-	public Planet(Planet p) {
+	public Planet() {
 		
 	}
 
