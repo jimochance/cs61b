@@ -4,7 +4,7 @@ public class Planet {
 	public double xxVel = 3.0;
 	public double yyVel = 4.0;
 	public double mass = 5.0;
-	public String imgFileName = "jupiter.gif";
+	public String imgFileName;
 	public static double gravitionalConstant = 6.67e-11;
 
 	public Planet(Planet p) {
@@ -78,6 +78,10 @@ public class Planet {
 	    //    position
 	    this.xxPos = this.xxPos + dt * this.xxVel;
 	    this.yyPos = this.yyPos + dt * this.yyVel;
+	}
+
+	public void draw() {
+		StdDraw.picture(this.xxPos, this.yyPos, "images/" + this.imgFileName);
 	}
 }
 
