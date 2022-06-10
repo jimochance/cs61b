@@ -8,20 +8,21 @@ public class NBody {
 
 	public static Planet[] readPlanets(String filename) {
 		In in = new In(filename);
-		Planet[] allPlanets = new Planet[5];
+		int numPlanets = in.readInt();
+		Planet[] allPlanets = new Planet[numPlanets];
 
 		/* skip first two lines */
 		in.readLine();
 		in.readLine();
 
 		for (int i = 0; i < allPlanets.length; i++) {
-			double xP = in.readDouble();
-			double yP = in.readDouble();
-			double xV = in.readDouble();
-			double yV = in.readDouble();
+			double xxPos = in.readDouble();
+			double yyPos = in.readDouble();
+			double xxVel = in.readDouble();
+			double yyVel = in.readDouble();
 			double mass = in.readDouble();
-			String image = in.readString();
-			allPlanets[i] = new Planet(xP, yP, xV, yV, mass, image);
+			String imgFileName = in.readString();
+			allPlanets[i] = new Planet(xxPos, yyPos, xxVel, yyVel, mass, imgFileName);
 		}
 		return allPlanets;
 	}
