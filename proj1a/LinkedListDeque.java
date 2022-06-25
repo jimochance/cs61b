@@ -21,13 +21,6 @@ public class LinkedListDeque<T> {
         size = 0;
     }
 
-    public LinkedListDeque(T item) {
-        sentinel = new Node(null, null, null);
-        sentinel.next = new Node(null, item, null);
-        sentinel.prev = sentinel.next;
-        size = 1;
-    }
-
     public int size() {
         return size;
     }
@@ -95,7 +88,7 @@ public class LinkedListDeque<T> {
         return null;
     }
 
-    public T getRecursiveHelper(int index, int count, Node node) {
+    private T getRecursiveHelper(int index, int count, Node node) {
         if (index == count) {
             return node.item;
         }
