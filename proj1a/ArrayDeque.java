@@ -3,134 +3,119 @@ public class ArrayDeque<T> {
     private int size;
     private int nextFirst;
     private int nextLast;
-    private final int INITIAL_CAPACITY = 8;
+    private int first;
 
     public ArrayDeque() {
-        items = (T[]) new Object[INITIAL_CAPACITY];
+        items = (T[]) new Object[8];
         size = 0;
-        nextFirst = 0;
-        nextLast = 1;
+        nextFirst = (items.length - size) / 2;
+        nextLast = nextFirst + 1;
+        first = nextFirst;
+    }
+
+    private void resize(int capacity) {
+        T[] a = (T[]) new Object[capacity];
+        int tempLength = items.length - first;
+        System.arraycopy(items, first, a, a.length / 2 - 1, tempLength);
+        if (tempLength != items.length) {
+            System.arraycopy(items, 0, a, a.length / 2 - 1 + tempLength, first);
+        }
+        items = a;
+        nextFirst = (items.length / 2 - 1 - 1 + items.length) % items.length;
+        first = (nextFirst + 1) % items.length;
+        nextLast = (nextFirst + size + 1) % items.length;
+    }
+
+    private void resizeDown(int capacity) {
+        if (capacity < 8) {
+            return;
+        }
+        T[] a = (T[]) new Object[capacity];
+        int tempLength = items.length - first;
+        if (tempLength < size) {
+            System.arraycopy(items, first, a, a.length / 2 - 1, tempLength);
+            int left = size - tempLength;
+            System.arraycopy(items, nextLast - 1, a, a.length / 2 - 1 + tempLength, left);
+        } else {
+            System.arraycopy(items, first, a, a.length / 2 - 1, size);
+        }
+        items = a;
+        nextFirst = (items.length / 2 - 1 - 1 + items.length) % items.length;
+        first = (nextFirst + 1) % items.length;
+        nextLast = (nextFirst + size + 1) % items.length;
+    }
+
+    public void addFirst(T item) {
+        if (size == items.length) {
+            resize(2 * items.length);
+        }
+        size += 1;
+        first = nextFirst;
+        items[nextFirst] = item;
+        nextFirst = (nextFirst - 1 + items.length) % items.length;
+    }
+
+    public void addLast(T item) {
+        if (size == items.length) {
+            resize(2 * items.length);
+        }
+        size += 1;
+        items[nextLast] = item;
+        if (items[first] == null) {
+            first = nextLast;
+        }
+        nextLast = (nextLast + 1) % items.length;
+    }
+
+    public boolean isEmpty() {
+        return (size == 0);
     }
 
     public int size() {
         return size;
     }
 
-    public boolean isEmpty() {
-        return (size == 0 ? true : false);
-    }
-
-    private int minusOne(int index) {
-        return Math.floorMod(index - 1, items.length);
-    }
-
-
-    private int plusOne(int index) {
-        return Math.floorMod(index + 1, items.length);
-    }
-
-    private int plusOne(int index, int length) {
-        return Math.floorMod(index + 1, length);
-    }
-
-    /**
-     * invariants:
-     * 设计resize()方法，将在增加ArrayDeaue实例内存的方法中调用
-     * 内部判断内存满则调用expand()增加内存
-     * 如果内存过小则调用reduce()减小内存
-     **/
-
-    private void resize() {
-        if (size == items.length) {
-            expand();
-        }
-        if (size < items.length / 4 && items.length > 8) {
-            reduce();
-        }
-    }
-
-    private void expand() {
-        resizeHelper(items.length * 2);
-    }
-
-    private void reduce() {
-        resizeHelper(items.length / 2);
-    }
-
-    private void resizeHelper(int capacity) {
-        T[] temp = items;
-        int begin = plusOne(nextFirst);
-        int end = minusOne(nextLast);
-        items = (T[]) new Object[capacity];
-        nextFirst = 0;
-        nextLast = 1;
-        for (int i = begin; i != end; i = plusOne(i, temp.length)) {
-            items[nextLast] = temp[i];
-            nextLast = plusOne(nextLast);
-        }
-        items[nextLast] = temp[end];
-        nextLast = plusOne(nextLast);
-    }
-
-    /**
-     * invariants:
-     * 通过minusOne()方法确定nextFirst，(nextFirst-1)%items.length
-     * 即nextFirst的下一个位置
-     * eg. (0 - 1) % 8 = 7
-     */
-    public void addFirst(T item) {
-        // resize();
-        items[nextFirst] = item;
-        nextFirst = minusOne(nextFirst);
-        size++;
-    }
-
-    private T getFirst() {
-        return items[plusOne(nextFirst)];
-    }
-
-    public T removeFirst() {
-        resize();
-        T res = getFirst();
-        nextFirst = plusOne(nextFirst);
-        items[nextFirst] = null;
-        size--;
-        return res;
-    }
-
-    public void addLast(T item) {
-        resize();
-        items[nextLast] = item;
-        nextLast = plusOne(nextLast);
-        size++;
-    }
-
-    private T getLast() {
-        return items[minusOne(nextLast)];
-    }
-
-    public T removeLast() {
-        resize();
-        T res = getLast();
-        nextLast = minusOne(nextLast);
-        items[nextLast] = null;
-        size--;
-        return res;
-    }
-
     public void printDeque() {
-        for (int index = plusOne(nextFirst); index != nextLast; index = plusOne(index)) {
-            System.out.print(items[index]);
-            System.out.print(" ");
+        for (int i = 0; i < size; i++) {
+            System.out.print(get(i) + " ");
         }
         System.out.println();
     }
 
-    public T get(int index) {
-        if (index < 0 || index >= size) {
+    public T removeFirst() {
+        if (size == 0) {
             return null;
         }
-        index = Math.floorMod(plusOne(nextFirst) + index, items.length);
-        return items[index];
+        T x = items[first];
+        items[first] = null;
+        first = (first + 1) % items.length;
+        nextFirst = (nextFirst + 1) % items.length;
+        size -= 1;
+        if ((double) size / items.length < 0.25) {
+            resizeDown(items.length / 2);
+        }
+        return x;
+    }
+
+    public T removeLast() {
+        if (size == 0) {
+            return null;
+        }
+        nextLast = (nextLast - 1 + items.length) % items.length;
+        T x = items[nextLast];
+        items[nextLast] = null;
+        size -= 1;
+        if ((double) size / items.length < 0.25) {
+            resizeDown(items.length / 2);
+        }
+        return x;
+    }
+
+    public T get(int index) {
+        if (index < 0 || index > size - 1) {
+            return null;
+        }
+        index += first;
+        return items[index % items.length];
     }
 }
