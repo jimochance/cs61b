@@ -33,7 +33,7 @@ public class TestPalindrome {
         assertTrue(palindrome.isPalindrome("flake", offByOne));
         assertTrue(palindrome.isPalindrome("", offByOne));
         assertTrue(palindrome.isPalindrome("$", offByOne));
-        assertFalse(palindrome.isPalindrome("aaabbbaaa", offByOne));
+        assertFalse(palindrome.isPalindrome("xxxyyyzzz", offByOne));
     }
 
     @Test
@@ -42,6 +42,6 @@ public class TestPalindrome {
         assertTrue(palindrome.isPalindrome("gmdjgm", offByN));
         assertTrue(palindrome.isPalindrome("", offByN));
         assertTrue(palindrome.isPalindrome("^", offByN));
-        assertFalse(palindrome.isPalindrome("aaabbbaaa", offByN));
+        assertFalse(palindrome.isPalindrome("xxxyyyzzz", offByN));
     }
 }
